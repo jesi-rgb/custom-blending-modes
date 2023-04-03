@@ -25,6 +25,7 @@
 		};
 
 		p5.draw = () => {
+			blendShader.setUniform('image', img);
 			blendShader.setUniform('color', [r, g, b, 1.0]);
 			p5.noStroke();
 			p5.rect(-p5.width / 2, -p5.height / 2, p5.width, p5.height);
