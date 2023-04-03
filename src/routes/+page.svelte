@@ -3,12 +3,12 @@
 	import ColorPicker from 'svelte-awesome-color-picker';
 	import MultiSelect from 'svelte-multiselect';
 
-	const modes = ['Multiply', 'Screen', 'Overlay', 'Hard Light', 'Add', 'Subtract'];
+	const modes = ['Multiply', 'Screen', 'Overlay', 'Hard Light', 'Soft Light', 'Add', 'Subtract'];
 	let selected = ['Multiply'];
 
 	let img;
-	let shader, screen, multiply, add, subtract, overlay, hard_light;
-	let rgb = { r: 255, g: 0, b: 255, a: 1 };
+	let shader, screen, multiply, add, subtract, overlay, hard_light, soft_light;
+	let rgb = { r: 255, g: 120, b: 255, a: 1 };
 	let r, g, b, a;
 	$: r = rgb.r / 255;
 	$: g = rgb.g / 255;
@@ -26,6 +26,7 @@
 			subtract = p5.loadShader('shaders/blends.vert', 'shaders/subtract.frag');
 			overlay = p5.loadShader('shaders/blends.vert', 'shaders/overlay.frag');
 			hard_light = p5.loadShader('shaders/blends.vert', 'shaders/hard_light.frag');
+			soft_light = p5.loadShader('shaders/blends.vert', 'shaders/soft_light.frag');
 
 			modeMap = {
 				Multiply: multiply,
@@ -33,6 +34,7 @@
 				Subtract: subtract,
 				Overlay: overlay,
 				'Hard Light': hard_light,
+				'Soft Light': soft_light,
 				Add: add
 			};
 
@@ -67,7 +69,7 @@
 				<P5 {sketch} debug />
 			</div>
 			<div class="w-fit mx-auto">
-				<ColorPicker bind:rgb />
+				<ColorPicker label={''} bind:rgb />
 			</div>
 		</div>
 	</div>
