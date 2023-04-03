@@ -3,11 +3,11 @@
 	import ColorPicker from 'svelte-awesome-color-picker';
 	import MultiSelect from 'svelte-multiselect';
 
-	const modes = ['Multiply', 'Screen', 'Add', 'Subtract'];
+	const modes = ['Multiply', 'Screen', 'Overlay', 'Hard Light', 'Add', 'Subtract'];
 	let selected = ['Multiply'];
 
 	let img;
-	let shader, screen, multiply, add, subtract, overlay;
+	let shader, screen, multiply, add, subtract, overlay, hard_light;
 	let rgb = { r: 255, g: 0, b: 255, a: 1 };
 	let r, g, b, a;
 	$: r = rgb.r / 255;
@@ -24,11 +24,15 @@
 			multiply = p5.loadShader('shaders/blends.vert', 'shaders/multiply.frag');
 			add = p5.loadShader('shaders/blends.vert', 'shaders/add.frag');
 			subtract = p5.loadShader('shaders/blends.vert', 'shaders/subtract.frag');
+			overlay = p5.loadShader('shaders/blends.vert', 'shaders/overlay.frag');
+			hard_light = p5.loadShader('shaders/blends.vert', 'shaders/hard_light.frag');
 
 			modeMap = {
 				Multiply: multiply,
 				Screen: screen,
 				Subtract: subtract,
+				Overlay: overlay,
+				'Hard Light': hard_light,
 				Add: add
 			};
 
@@ -48,8 +52,6 @@
 			p5.rect(-p5.width / 2, -p5.height / 2, p5.width, p5.height);
 		};
 	};
-
-	let parent;
 </script>
 
 <div>
@@ -66,7 +68,7 @@
 		</div>
 		<div class="flex flex-col justify-center w-3/4">
 			<div class="border border-black w-fit mx-auto">
-				<P5 {sketch} target={parent} debug />
+				<P5 {sketch} debug />
 			</div>
 			<div class="w-fit mx-auto">
 				<ColorPicker bind:rgb />
