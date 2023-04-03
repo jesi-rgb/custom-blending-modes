@@ -1,33 +1,50 @@
 <script>
 	import P5 from 'p5-svelte';
 	import ColorPicker from 'svelte-awesome-color-picker';
+	import MultiSelect from 'svelte-multiselect';
+
+	const modes = ['Multiply', 'Screen', 'Add', 'Subtract'];
+	let selected = ['Multiply'];
 
 	let img;
-	let blendShader;
-	let rgb = { r: 255, g: 0, b: 255 };
-	let r, g, b;
-
+	let shader, screen, multiply, add, subtract, overlay;
+	let rgb = { r: 255, g: 0, b: 255, a: 1 };
+	let r, g, b, a;
 	$: r = rgb.r / 255;
 	$: g = rgb.g / 255;
 	$: b = rgb.b / 255;
+	$: a = rgb.a;
+
+	let modeMap;
 
 	const sketch = (p5) => {
 		p5.preload = () => {
 			img = p5.loadImage('images/parrot.png');
-			blendShader = p5.loadShader('shaders/blends.vert', 'shaders/blends.frag');
+			screen = p5.loadShader('shaders/blends.vert', 'shaders/screen.frag');
+			multiply = p5.loadShader('shaders/blends.vert', 'shaders/multiply.frag');
+			add = p5.loadShader('shaders/blends.vert', 'shaders/add.frag');
+			subtract = p5.loadShader('shaders/blends.vert', 'shaders/subtract.frag');
+
+			modeMap = {
+				Multiply: multiply,
+				Screen: screen,
+				Subtract: subtract,
+				Add: add
+			};
+
+			shader = multiply;
 		};
 
 		p5.setup = () => {
 			p5.createCanvas(img.width, img.height, p5.WEBGL);
-			p5.shader(blendShader);
-
-			blendShader.setUniform('image', img);
 		};
 
 		p5.draw = () => {
-			blendShader.setUniform('image', img);
-			blendShader.setUniform('color', [r, g, b, 1.0]);
-			p5.noStroke();
+			shader = modeMap[selected[0]];
+
+			p5.shader(shader);
+			shader.setUniform('image', img);
+			shader.setUniform('color', [r, g, b, a]);
 			p5.rect(-p5.width / 2, -p5.height / 2, p5.width, p5.height);
 		};
 	};
@@ -44,6 +61,8 @@
 				Tempor duis consequat aute esse ullamco occaecat non sit veniam dolor. Eu nostrud laboris id
 				aliquip ad laborum mollit reprehenderit consectetur. Excepteur labore eu id Lorem aliquip
 			</p>
+
+			<MultiSelect bind:selected options={modes} required={1} minSelect={1} maxSelect={1} />
 		</div>
 		<div class="flex flex-col justify-center w-3/4">
 			<div class="border border-black w-fit mx-auto">
