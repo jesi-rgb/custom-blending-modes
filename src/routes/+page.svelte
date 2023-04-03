@@ -58,11 +58,7 @@
 	<div class="flex flex-row my-10">
 		<div class="w-1/4 mx-4">
 			<h1 class="text-4xl font-bold font-serif mb-10">Blending Modes</h1>
-			<p>
-				Do exercitation aliquip incididunt tempor ullamco aliqua excepteur sint Lorem sit minim id.
-				Tempor duis consequat aute esse ullamco occaecat non sit veniam dolor. Eu nostrud laboris id
-				aliquip ad laborum mollit reprehenderit consectetur. Excepteur labore eu id Lorem aliquip
-			</p>
+			<p>Choose your blending mode and bruh</p>
 
 			<MultiSelect bind:selected options={modes} required={1} minSelect={1} maxSelect={1} />
 		</div>
