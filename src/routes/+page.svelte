@@ -15,7 +15,7 @@
 		'Subtract',
 		'Custom'
 	];
-	let selected = ['Custom'];
+	let selected = ['Multiply'];
 
 	let img;
 	let shader, screen, multiply, add, subtract, overlay, hard_light, soft_light, custom;
