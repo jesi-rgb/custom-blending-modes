@@ -18,7 +18,7 @@
 	let selected = ['Custom'];
 
 	let img;
-	let shader, screen, multiply, add, subtract, overlay, hard_light, soft_light, custom;
+	let shader, screen, multiply, add, subtract, overlay, hard_light, soft_light;
 	let rgb = { r: 255, g: 120, b: 255, a: 1 };
 	let r, g, b, a;
 	$: r = rgb.r / 255;
@@ -94,12 +94,12 @@ void main() {
 			let maxW = p5.windowWidth - 10 < 900 ? p5.windowWidth - 10 : 900;
 
 			p5.createCanvas(maxW, maxW / imgAspectRatio, p5.WEBGL);
-			custom = p5.createShader(customVertex, customFragment);
+			modeMap['Custom'] = p5.createShader(customVertex, customFragment);
 		};
 		p5.keyPressed = (e) => {
 			if (e.key === 'Enter') {
 				inputString = textArea?.value;
-				customFragment = `
+				let updatedFragment = `
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -118,11 +118,8 @@ void main() {
 }
 `;
 
-				modeMap['Custom'] = p5.createShader(customVertex, customFragment);
-				console.log(custom);
+				modeMap['Custom'] = p5.createShader(customVertex, updatedFragment);
 			}
-
-			console.log(e);
 		};
 
 		p5.draw = () => {
