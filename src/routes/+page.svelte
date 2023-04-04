@@ -98,8 +98,8 @@ void main() {
 			modeMap['Custom'] = p5.createShader(customVertex, customFragment);
 		};
 		p5.keyPressed = (e) => {
+			console.log(e);
 			if (e.key === 'Enter') {
-				console.log(e);
 				inputString = textArea?.value === '' ? 'bg' : textArea?.value;
 				let updatedFragment = `
 #ifdef GL_ES
@@ -188,7 +188,7 @@ void main() {
 										})
 									);
 								}}
-								class="cursor-pointer ml-6"
+								class="cursor-pointer ml-6 select-none"
 							>
 								bg - 1.0 * fg / 2.0
 							</li>
@@ -202,7 +202,7 @@ void main() {
 										})
 									);
 								}}
-								class="ml-6 cursor-pointer"
+								class="ml-6 cursor-pointer select-none"
 							>
 								bg * 1.4 / fg * 0.3
 							</li>
@@ -217,7 +217,7 @@ void main() {
 										})
 									);
 								}}
-								class="ml-6 cursor-pointer"
+								class="ml-6 cursor-pointer select-none"
 							>
 								bg * 3.0 - fg
 							</li>
@@ -232,9 +232,24 @@ void main() {
 										})
 									);
 								}}
-								class="ml-6 cursor-pointer"
+								class="ml-6 cursor-pointer select-none"
 							>
 								bg * 1.4 / fg * 0.3 + yellow * 0.3 + bg - 1.1
+							</li>
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<li
+								on:click={() => {
+									inputString =
+										'bg * 3.0 - fg - 0.4 + bg * 0.3 / fg - 0.1 + yellow * 0.3 - cyan * 0.6';
+									window.dispatchEvent(
+										new KeyboardEvent('keydown', {
+											key: 'Enter'
+										})
+									);
+								}}
+								class="ml-6 cursor-pointer select-none"
+							>
+								bg * 3.0 - fg - 0.4 + bg * 0.3 / fg - 0.1 + yellow * 0.3 - cyan * 0.6
 							</li>
 						</ul>
 					</div>
@@ -246,7 +261,6 @@ void main() {
 							}
 						}}
 						tabindex="0"
-						inputmode="tel"
 						style="box-shadow: 2px 2px 2px #00000022; resize:none;"
 						class="border font-mono border-black bg-black bg-opacity-0 rounded-sm p-4 my-2 w-full"
 						type="text"
@@ -310,7 +324,7 @@ void main() {
 				</div>
 			{/if}
 		</div>
-		<div class="border border-black relative mx-auto drop-shadow-xl">
+		<div class="relative border border-black mx-auto drop-shadow-xl">
 			<P5 {sketch} debug />
 			<div
 				style="filter:box-shadow(0 0 0.75rem #fff)"
@@ -332,7 +346,6 @@ void main() {
 <style>
 	:root {
 		--text-color: #000;
-		--sms-active-color: #000;
 		--sms-border: 1px solid #000;
 		--sms-options-bg: #fff;
 	}
