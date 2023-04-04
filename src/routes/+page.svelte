@@ -98,7 +98,7 @@ void main() {
 		};
 		p5.keyPressed = (e) => {
 			if (e.key === 'Enter') {
-				inputString = textArea?.value;
+				inputString = textArea?.value === '' ? 'bg' : textArea?.value;
 				let updatedFragment = `
 #ifdef GL_ES
 precision mediump float;
@@ -117,7 +117,6 @@ void main() {
     gl_FragColor = custom(img, color);
 }
 `;
-
 				modeMap['Custom'] = p5.createShader(customVertex, updatedFragment);
 			}
 		};
@@ -137,7 +136,7 @@ void main() {
 </script>
 
 <div>
-	<div class="flex flex-col font-medium my-10">
+	<div class="flex flex-col xl:flex-row font-medium my-10">
 		<div class="xl:w-1/4 mx-4">
 			<h1 class="text-6xl font-extrabold mb-10 tracking-tighter">Blending Modes</h1>
 			<p>Choose your blending mode and let the <em>bruh</em> happen</p>
@@ -195,12 +194,19 @@ void main() {
 					</div>
 					<textarea
 						bind:this={textArea}
+						on:keydown={(e) => {
+							if (e.key === 'Enter') {
+								e.preventDefault();
+							}
+						}}
+						tabindex="0"
 						style="box-shadow: 2px 2px 2px #00000022"
 						class="border font-mono border-black rounded-sm p-10"
 						type="text"
 						name="shader"
 						id="shader">{inputString}</textarea
 					>
+					<button class="bg-blue-400 p-3">Load</button>
 				</div>
 			{/if}
 		</div>
