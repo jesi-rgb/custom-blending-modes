@@ -19,8 +19,8 @@
 
 	let img;
 	let shader, screen, multiply, add, subtract, overlay, hard_light, soft_light;
-	let rgb = { r: 255, g: 120, b: 255, a: 1 };
-	let hex;
+	let hex,
+		rgb = { r: 255, g: 120, b: 255, a: 1 };
 	let r, g, b, a;
 	$: r = rgb.r / 255;
 	$: g = rgb.g / 255;
@@ -99,6 +99,7 @@ void main() {
 		};
 		p5.keyPressed = (e) => {
 			if (e.key === 'Enter') {
+				console.log(e);
 				inputString = textArea?.value === '' ? 'bg' : textArea?.value;
 				let updatedFragment = `
 #ifdef GL_ES
@@ -110,6 +111,7 @@ uniform sampler2D image;
 uniform vec4 color;
 
 vec4 custom(vec4 bg, vec4 fg){
+    vec4 magenta = vec4(1., 0., 1., 1.);
     vec4 yellow = vec4(1., 1., 0., 1.);
     vec4 cyan = vec4(0., 1., 1., 1.);
     vec4 red = vec4(1., 0., 0., 1.);
@@ -158,10 +160,10 @@ void main() {
 				rectangle and experiment!
 			</p>
 
-			<hr style="color: {hex}; background-color: {hex};" />
+			<hr style="height:2px;border-width:0;color: {hex}; background-color: {hex};" />
 			<div class="w-full my-10">
 				<MultiSelect
-					style="box-shadow: 2px 2px 2px #00000022"
+					style="--border: {hex}"
 					bind:selected
 					options={modes}
 					inputmode="none"
@@ -173,6 +175,69 @@ void main() {
 
 			{#if selected[0] === 'Custom'}
 				<div class="mx-auto">
+					<div>
+						May wanna try these... ?
+						<ul class="list-disc font-mono">
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<li
+								on:click={() => {
+									inputString = 'bg - 1.0 * fg / 2.0';
+									window.dispatchEvent(
+										new KeyboardEvent('keydown', {
+											key: 'Enter'
+										})
+									);
+								}}
+								class="cursor-pointer ml-6"
+							>
+								bg - 1.0 * fg / 2.0
+							</li>
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<li
+								on:click={() => {
+									inputString = 'bg * 1.4 / fg * 0.3';
+									window.dispatchEvent(
+										new KeyboardEvent('keydown', {
+											key: 'Enter'
+										})
+									);
+								}}
+								class="ml-6 cursor-pointer"
+							>
+								bg * 1.4 / fg * 0.3
+							</li>
+
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<li
+								on:click={() => {
+									inputString = 'bg * 3.0 - fg';
+									window.dispatchEvent(
+										new KeyboardEvent('keydown', {
+											key: 'Enter'
+										})
+									);
+								}}
+								class="ml-6 cursor-pointer"
+							>
+								bg * 3.0 - fg
+							</li>
+
+							<!-- svelte-ignore a11y-click-events-have-key-events -->
+							<li
+								on:click={() => {
+									inputString = 'bg * 1.4 / fg * 0.3 + yellow * 0.3 + bg - 1.1';
+									window.dispatchEvent(
+										new KeyboardEvent('keydown', {
+											key: 'Enter'
+										})
+									);
+								}}
+								class="ml-6 cursor-pointer"
+							>
+								bg * 1.4 / fg * 0.3 + yellow * 0.3 + bg - 1.1
+							</li>
+						</ul>
+					</div>
 					<textarea
 						bind:this={textArea}
 						on:keydown={(e) => {
@@ -182,9 +247,10 @@ void main() {
 						}}
 						tabindex="0"
 						inputmode="tel"
-						style="box-shadow: 2px 2px 2px #00000022"
-						class="border font-mono border-black rounded-sm p-4 my-2 w-full"
+						style="box-shadow: 2px 2px 2px #00000022; resize:none;"
+						class="border font-mono border-black bg-black bg-opacity-0 rounded-sm p-4 my-2 w-full"
 						type="text"
+						rows="1"
 						name="shader"
 						id="shader">{inputString}</textarea
 					>
@@ -262,3 +328,12 @@ void main() {
 		</div>
 	</div>
 </div>
+
+<style>
+	:root {
+		--text-color: #000;
+		--sms-active-color: #000;
+		--sms-border: 1px solid #000;
+		--sms-options-bg: #fff;
+	}
+</style>
