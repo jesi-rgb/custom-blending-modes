@@ -15,7 +15,7 @@
 		'Subtract',
 		'Custom'
 	];
-	let selected = ['Multiply'];
+	let selected = ['Custom'];
 
 	let img;
 	let shader, screen, multiply, add, subtract, overlay, hard_light, soft_light, custom;
@@ -28,7 +28,7 @@
 
 	let modeMap;
 	let textArea;
-	let inputString = 'bg * fg';
+	let inputString = 'bg / fg';
 
 	let customVertex = `
 attribute vec3 aPosition;
@@ -78,8 +78,6 @@ void main() {
 			hard_light = p5.loadShader('shaders/blends.vert', 'shaders/hard_light.frag');
 			soft_light = p5.loadShader('shaders/blends.vert', 'shaders/soft_light.frag');
 
-			console.log(customFragment);
-
 			modeMap = {
 				Multiply: multiply,
 				Screen: screen,
@@ -89,9 +87,6 @@ void main() {
 				'Soft Light': soft_light,
 				Add: add
 			};
-
-			custom = p5.createShader(customVertex, customFragment);
-			modeMap['Custom'] = custom;
 		};
 
 		p5.setup = () => {
@@ -99,10 +94,42 @@ void main() {
 			let maxW = p5.windowWidth - 10 < 900 ? p5.windowWidth - 10 : 900;
 
 			p5.createCanvas(maxW, maxW / imgAspectRatio, p5.WEBGL);
+			custom = p5.createShader(customVertex, customFragment);
+		};
+		p5.keyPressed = (e) => {
+			if (e.key === 'Enter') {
+				inputString = textArea?.value;
+				customFragment = `
+#ifdef GL_ES
+precision mediump float;
+#endif
+varying highp vec2 vVertTexCoord;
+
+uniform sampler2D image;
+uniform vec4 color;
+
+vec4 custom(vec4 bg, vec4 fg){
+    return ${inputString};
+}
+
+void main() {
+    vec4 img = texture2D(image, vec2(vVertTexCoord.x, vVertTexCoord.y));
+    gl_FragColor = custom(img, color);
+}
+`;
+
+				modeMap['Custom'] = p5.createShader(customVertex, customFragment);
+				console.log(custom);
+			}
+
+			console.log(e);
 		};
 
 		p5.draw = () => {
 			shader = modeMap[selected[0]];
+			if (p5.frameCount % 60 === 0) {
+				console.log(shader._fragSrc);
+			}
 
 			p5.shader(shader);
 			shader.setUniform('image', img);
@@ -115,7 +142,7 @@ void main() {
 <div>
 	<div class="flex flex-col font-medium my-10">
 		<div class="xl:w-1/4 mx-4">
-			<h1 class="text-6xl font-extrabold mb-10">Blending Modes</h1>
+			<h1 class="text-6xl font-extrabold mb-10 tracking-tighter">Blending Modes</h1>
 			<p>Choose your blending mode and let the <em>bruh</em> happen</p>
 
 			<div class="w-min mb-10">
@@ -175,7 +202,7 @@ void main() {
 						class="border font-mono border-black rounded-sm p-10"
 						type="text"
 						name="shader"
-						id="shader">bg * fg</textarea
+						id="shader">{inputString}</textarea
 					>
 				</div>
 			{/if}
