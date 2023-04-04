@@ -4,8 +4,9 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				sans: ['Manrope'],
-				mono: ['JetBrains Mono']
+				sans: ['Supreme'],
+				serif: ['Zodiak'],
+				mono: ['IBM Plex Mono']
 			}
 		}
 	},
