@@ -1,38 +1,13 @@
-# create-svelte
+# Custom Blending Modes
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This is a little webpage created as a demo for the youtube channel Design Bits. Check out the main video here!
 
-## Creating a project
+It aims to bring closer to designers and alike what the concept of what a blending mode is. You can watch the video here! If you got here, thanks! Be sure to say hi wherever!
 
-If you're seeing this, you've probably already done this step. Congrats!
+# How to use this
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+Functionality is simple (and rather limited). You can choose whatever blend mode you want out of the default ones. The idea is we are are creating a rectangle the same size as the image and we can set whatever color and blend mode we want for that rectangle. That way, we are able to see the effect it has on the photograph.
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+The main feature is the custom blend mode. We can write our own formulas and see what a new blend mode would look like.
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Some considerations: the language or syntax we are using to write this is GLSL. Obviously, I don't expect anyone using this to know what it is, but there might be a chance that you know. This language has a strict set of rules that can (and will) break when you try to input a formula of your own. The program crashes and stalls, so just reload the wepage.
