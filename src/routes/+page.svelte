@@ -150,8 +150,8 @@ void main() {
 	};
 </script>
 
-<div class="w-screen h-screen absolute top-0 -z-20 bg-white" />
-<div class="w-screen h-screen opacity-10 absolute top-0 -z-10" style="background-color: {hex};" />
+<div class="w-screen h-[1100px] absolute top-0 -z-20 bg-white" />
+<div class="w-screen h-[1100px] opacity-10 absolute top-0 -z-10" style="background-color: {hex};" />
 <div class="z-10">
 	<div class="flex flex-col xl:flex-row font-medium my-10">
 		<div class="xl:w-1/4 mx-4">
