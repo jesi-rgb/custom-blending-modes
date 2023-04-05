@@ -1,6 +1,6 @@
 <script>
 	import P5 from 'p5-svelte';
-	import { Plus, Minus, X, Divide, Bluetooth } from 'phosphor-svelte';
+	import { Plus, Minus, X, Divide, Bluetooth, KeyReturn } from 'phosphor-svelte';
 
 	import ColorPicker from 'svelte-awesome-color-picker';
 	import MultiSelect from 'svelte-multiselect';
@@ -19,8 +19,13 @@
 
 	let img;
 	let shader, screen, multiply, add, subtract, overlay, hard_light, soft_light;
+	let ctx;
 	let hex,
 		rgb = { r: 255, g: 120, b: 255, a: 1 };
+
+	$: brightness = (0.2 * rgb.r + 0.7 * rgb.g + 0.1 * rgb.b) / 255;
+	$: buttonsColor = brightness < 0.5 ? 'white' : 'black';
+
 	let r, g, b, a;
 	$: r = rgb.r / 255;
 	$: g = rgb.g / 255;
@@ -68,8 +73,38 @@ void main() {
 }
 `;
 
+	function updateShader(p5) {
+		inputString = textArea?.value === '' ? 'bg' : textArea?.value;
+		let updatedFragment = `
+#ifdef GL_ES
+precision mediump float;
+#endif
+varying highp vec2 vVertTexCoord;
+
+uniform sampler2D image;
+uniform vec4 color;
+
+vec4 custom(vec4 bg, vec4 fg){
+    vec4 magenta = vec4(1., 0., 1., 1.);
+    vec4 yellow = vec4(1., 1., 0., 1.);
+    vec4 cyan = vec4(0., 1., 1., 1.);
+    vec4 red = vec4(1., 0., 0., 1.);
+    vec4 green = vec4(0., 1., 0., 1.);
+    vec4 blue = vec4(0., 0., 1., 1.);
+    return ${inputString};
+}
+
+void main() {
+    vec4 img = texture2D(image, vec2(vVertTexCoord.x, vVertTexCoord.y));
+    gl_FragColor = custom(img, color);
+}
+`;
+		modeMap['Custom'] = p5.createShader(customVertex, updatedFragment);
+	}
+
 	const sketch = (p5) => {
 		p5.preload = () => {
+			ctx = p5;
 			img = p5.loadImage('images/parrot.png');
 			screen = p5.loadShader('shaders/blends.vert', 'shaders/screen.frag');
 			multiply = p5.loadShader('shaders/blends.vert', 'shaders/multiply.frag');
@@ -100,32 +135,7 @@ void main() {
 		p5.keyPressed = (e) => {
 			console.log(e);
 			if (e.key === 'Enter') {
-				inputString = textArea?.value === '' ? 'bg' : textArea?.value;
-				let updatedFragment = `
-#ifdef GL_ES
-precision mediump float;
-#endif
-varying highp vec2 vVertTexCoord;
-
-uniform sampler2D image;
-uniform vec4 color;
-
-vec4 custom(vec4 bg, vec4 fg){
-    vec4 magenta = vec4(1., 0., 1., 1.);
-    vec4 yellow = vec4(1., 1., 0., 1.);
-    vec4 cyan = vec4(0., 1., 1., 1.);
-    vec4 red = vec4(1., 0., 0., 1.);
-    vec4 green = vec4(0., 1., 0., 1.);
-    vec4 blue = vec4(0., 0., 1., 1.);
-    return ${inputString};
-}
-
-void main() {
-    vec4 img = texture2D(image, vec2(vVertTexCoord.x, vVertTexCoord.y));
-    gl_FragColor = custom(img, color);
-}
-`;
-				modeMap['Custom'] = p5.createShader(customVertex, updatedFragment);
+				updateShader(p5);
 			}
 		};
 
@@ -140,9 +150,10 @@ void main() {
 	};
 </script>
 
-<div class="w-screen h-screen opacity-20 absolute top-0 -z-10" style="background-color: {hex};" />
+<div class="w-screen h-screen absolute top-0 -z-20 bg-white" />
+<div class="w-screen h-screen opacity-10 absolute top-0 -z-10" style="background-color: {hex};" />
 <div class="z-10">
-	<div class="flex flex-col justify-between xl:justify-normal xl:flex-row font-medium my-10">
+	<div class="flex flex-col xl:flex-row font-medium my-10">
 		<div class="xl:w-1/4 mx-4">
 			<h1 class="text-4xl xl:text-6xl font-extrabold font-serif mb-4 tracking-tighter">
 				Blending Modes
@@ -159,8 +170,12 @@ void main() {
 				dot down there, in the bottom center of the image. Use it to change the color of the overlaid
 				rectangle and experiment!
 			</p>
+			<p>
+				You can read more about all this in the
+				<a href="/about" class="font-extrabold" style="color: {hex};">about</a> page.
+			</p>
 
-			<hr style="height:2px;border-width:0;color: {hex}; background-color: {hex};" />
+			<hr class="my-5" style="height:2px;border-width:0;color: {hex}; background-color: {hex};" />
 			<div class="w-full my-10">
 				<MultiSelect
 					style="--border: {hex}"
@@ -182,11 +197,6 @@ void main() {
 							<li
 								on:click={() => {
 									inputString = 'bg - 1.0 * fg / 2.0';
-									window.dispatchEvent(
-										new KeyboardEvent('keydown', {
-											key: 'Enter'
-										})
-									);
 								}}
 								class="cursor-pointer ml-6 select-none"
 							>
@@ -196,11 +206,6 @@ void main() {
 							<li
 								on:click={() => {
 									inputString = 'bg * 1.4 / fg * 0.3';
-									window.dispatchEvent(
-										new KeyboardEvent('keydown', {
-											key: 'Enter'
-										})
-									);
 								}}
 								class="ml-6 cursor-pointer select-none"
 							>
@@ -211,11 +216,6 @@ void main() {
 							<li
 								on:click={() => {
 									inputString = 'bg * 3.0 - fg';
-									window.dispatchEvent(
-										new KeyboardEvent('keydown', {
-											key: 'Enter'
-										})
-									);
 								}}
 								class="ml-6 cursor-pointer select-none"
 							>
@@ -226,11 +226,6 @@ void main() {
 							<li
 								on:click={() => {
 									inputString = 'bg * 1.4 / fg * 0.3 + yellow * 0.3 + bg - 1.1';
-									window.dispatchEvent(
-										new KeyboardEvent('keydown', {
-											key: 'Enter'
-										})
-									);
 								}}
 								class="ml-6 cursor-pointer select-none"
 							>
@@ -241,11 +236,6 @@ void main() {
 								on:click={() => {
 									inputString =
 										'bg * 3.0 - fg - 0.4 + bg * 0.3 / fg - 0.1 + yellow * 0.3 - cyan * 0.6';
-									window.dispatchEvent(
-										new KeyboardEvent('keydown', {
-											key: 'Enter'
-										})
-									);
 								}}
 								class="ml-6 cursor-pointer select-none"
 							>
@@ -261,14 +251,15 @@ void main() {
 							}
 						}}
 						tabindex="0"
-						style="box-shadow: 2px 2px 2px #00000022; resize:none;"
-						class="border font-mono border-black bg-black bg-opacity-0 rounded-sm p-4 my-2 w-full"
+						style="resize:none;"
+						class="border drop-shadow-md font-mono border-black bg-black bg-opacity-0 rounded-sm p-4 my-2 w-full"
 						type="text"
 						rows="1"
 						name="shader"
 						id="shader">{inputString}</textarea
 					>
 				</div>
+
 				<div>
 					<div class="flex items-center justify-center xl:justify-evenly mb-5 space-x-3">
 						<button
@@ -276,7 +267,7 @@ void main() {
 								textArea.value += 'bg ';
 								textArea.focus();
 							}}
-							style="background-color: {hex};"
+							style="background-color: {hex}; color: {buttonsColor}"
 							class="w-[40px] h-[40px] text-lg rounded-sm">Bg</button
 						>
 						<button
@@ -284,7 +275,7 @@ void main() {
 								textArea.value += 'fg ';
 								textArea.focus();
 							}}
-							style="background-color: {hex};"
+							style="background-color: {hex}; color: {buttonsColor}"
 							class="w-[40px] h-[40px] text-lg rounded-sm">Fg</button
 						>
 						<button
@@ -292,7 +283,7 @@ void main() {
 								textArea.value += ' + ';
 								textArea.focus();
 							}}
-							style="background-color: {hex};"
+							style="background-color: {hex}; color: {buttonsColor}"
 							class="p-3 rounded-sm"
 							><Plus weight={'bold'} />
 						</button>
@@ -301,7 +292,7 @@ void main() {
 								textArea.value += ' - ';
 								textArea.focus();
 							}}
-							style="background-color: {hex};"
+							style="background-color: {hex}; color: {buttonsColor}"
 							class="p-3 rounded-sm"><Minus weight={'bold'} /></button
 						>
 						<button
@@ -309,7 +300,7 @@ void main() {
 								textArea.value += ' * ';
 								textArea.focus();
 							}}
-							style="background-color: {hex};"
+							style="background-color: {hex}; color: {buttonsColor}"
 							class="p-3 rounded-sm"><X weight={'bold'} /></button
 						>
 						<button
@@ -317,14 +308,20 @@ void main() {
 								textArea.value += ' / ';
 								textArea.focus();
 							}}
-							style="background-color: {hex};"
+							style="background-color: {hex}; color: {buttonsColor}"
 							class="p-3 rounded-sm"><Divide weight={'bold'} /></button
 						>
+						<button
+							style="background-color: {hex}; color: {buttonsColor}"
+							class="p-1 rounded-sm"
+							on:click={() => updateShader(ctx)}
+							><KeyReturn weight={'regular'} size={40} />
+						</button>
 					</div>
 				</div>
 			{/if}
 		</div>
-		<div class="relative border border-black mx-auto drop-shadow-xl">
+		<div class="relative mx-auto drop-shadow-xl">
 			<P5 {sketch} debug />
 			<div
 				style="filter:box-shadow(0 0 0.75rem #fff)"
