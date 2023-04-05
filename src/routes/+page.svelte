@@ -322,7 +322,7 @@ void main() {
 			{/if}
 		</div>
 		<div class="relative mx-auto drop-shadow-xl">
-			<P5 {sketch} debug />
+			<P5 {sketch} />
 			<div
 				style="filter:box-shadow(0 0 0.75rem #fff)"
 				class="w-fit bottom-0 right-0 left-0 absolute mx-auto"
