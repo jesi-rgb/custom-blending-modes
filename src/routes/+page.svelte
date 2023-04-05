@@ -19,10 +19,11 @@
 
 	let img;
 	let shader, screen, multiply, add, subtract, overlay, hard_light, soft_light;
+
 	let ctx;
+
 	let hex,
 		rgb = { r: 255, g: 120, b: 255, a: 1 };
-
 	$: brightness = (0.2 * rgb.r + 0.7 * rgb.g + 0.1 * rgb.b) / 255;
 	$: buttonsColor = brightness < 0.5 ? 'white' : 'black';
 

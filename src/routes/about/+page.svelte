@@ -1,3 +1,7 @@
+<script>
+	import logo from '$lib/images/design-bits-no-ring.svg';
+</script>
+
 <div class="w-screen h-screen absolute -z-10 top-0" style="background-color: #aff7d0;" />
 <div style="color: #021713" class="flex-col text-lg space-y-20 mx-auto max-w-sm xl:max-w-lg my-10">
 	<div class="bg-[#021713] px-4 py-2 text-[#aff7d0] rounded-xl -my-5 w-fit">
@@ -38,3 +42,16 @@
 		</div>
 	</div>
 </div>
+<hr
+	class="max-w-sm mx-auto"
+	style="height:2px;border-width:0;color: #021713; background-color: #021713;"
+/>
+<a
+	class="cursor-pointer my-10 flex items-center w-fit mx-auto text-3xl space-x-3 hover:bg-black hover:bg-opacity-10 p-3 rounded-xl transition-colors"
+	href="https://youtube.com/@Design_Bits"
+>
+	<img src={logo} width="40px" class="" alt="design bits logo" />
+	<div class="font-semibold tracking-tighter">Design Bits</div>
+	<div class="font-semibold text-sm tracking-tighter">—</div>
+	<div class="font-semibold text-sm tracking-tighter">by Jesús Rascón</div>
+</a>
