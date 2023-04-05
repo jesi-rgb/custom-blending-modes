@@ -155,8 +155,8 @@ void main() {
 <div class="z-10">
 	<div class="flex flex-col xl:flex-row font-medium my-10">
 		<div class="xl:w-1/4 mx-4">
-			<h1 class="text-4xl xl:text-6xl font-extrabold font-serif mb-4 tracking-tighter">
-				Blending Modes
+			<h1 class="text-3xl xl:text-6xl font-extrabold font-serif mb-4 tracking-tighter">
+				Custom Blending Modes
 			</h1>
 			<p class="text-lg tracking-tight mb-2">
 				Choose your blending mode and let the <em>✨magic✨</em> happen. Select from the usual ones or
