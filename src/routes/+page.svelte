@@ -134,7 +134,6 @@ void main() {
 			modeMap['Custom'] = p5.createShader(customVertex, customFragment);
 		};
 		p5.keyPressed = (e) => {
-			console.log(e);
 			if (e.key === 'Enter') {
 				updateShader(p5);
 			}
