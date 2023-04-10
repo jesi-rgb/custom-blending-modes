@@ -6,7 +6,7 @@ export default {
 			fontFamily: {
 				sans: ['Supreme'],
 				serif: ['Zodiak'],
-				mono: ['IBM Plex Mono']
+				mono: ['PT Mono', 'monospace']
 			}
 		}
 	},
