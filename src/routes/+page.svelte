@@ -1,6 +1,6 @@
 <script>
 	import P5 from 'p5-svelte';
-	import { Plus, Minus, X, Divide, Bluetooth, KeyReturn } from 'phosphor-svelte';
+	import { Plus, Minus, X, Divide, KeyReturn } from 'phosphor-svelte';
 
 	import ColorPicker from 'svelte-awesome-color-picker';
 	import MultiSelect from 'svelte-multiselect';
