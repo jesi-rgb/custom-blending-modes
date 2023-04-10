@@ -33,10 +33,10 @@
 		<div class="my-5 flex-col space-y-5">
 			<p>
 				This is a little webpage created as a demo for the youtube channel Design Bits. Check out
-				the main video here!
+				the main channel here!
 			</p>
 			<p>
-				It aims to bring closer to designers and alike what the concept of what a blending mode is.
+				It aims to bring closer to designers and alike the concept of what a blending mode is.
 				You can watch the video here! If you got here, thanks! Be sure to say hi wherever!
 			</p>
 		</div>
