@@ -2,7 +2,6 @@
 	import logo from '$lib/images/design-bits-no-ring.svg';
 </script>
 
-<div class="w-screen h-screen absolute -z-10 top-0" style="background-color: #aff7d0;" />
 <div style="color: #021713" class="flex-col text-lg space-y-20 mx-auto max-w-sm xl:max-w-lg my-10">
 	<div class="bg-[#021713] px-4 py-2 text-[#aff7d0] rounded-xl -my-5 w-fit">
 		<a href="/"> Back home!</a>
@@ -32,18 +31,17 @@
 		<div class="font-serif text-4xl font-bold">About</div>
 		<div class="my-5 flex-col space-y-5">
 			<p>
-				This is a little webpage created as a demo for the youtube channel Design Bits. Check out
-				the main channel here!
+				This is a little webpage created as a demo for the <a class="underline" href="https://www.youtube.com/@Design_Bits">youtube channel Design Bits</a>.
 			</p>
 			<p>
 				It aims to bring closer to designers and alike the concept of what a blending mode is.
-				You can watch the video here! If you got here, thanks! Be sure to say hi wherever!
+				You can watch the video <a class="underline" href="https://www.youtube.com/watch?v=D7Yg4H8e7uw">here</a>! If you got here, thanks! Be sure to say hi wherever!
 			</p>
 		</div>
 	</div>
 </div>
 <hr
-	class="max-w-sm mx-auto"
+	class="max-w-sm xl:max-w-lg mx-auto"
 	style="height:2px;border-width:0;color: #021713; background-color: #021713;"
 />
 <a
