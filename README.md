@@ -1,6 +1,6 @@
 # Custom Blending Modes
 
-This is a little webpage created as a demo for the youtube channel Design Bits. Check out the main video here!
+This is a little webpage created as a demo for the [youtube channel Design Bits](https://www.youtube.com/@Design_Bits). Check out the main video [here](https://www.youtube.com/watch?v=D7Yg4H8e7uw)!
 
 It aims to bring closer to designers and alike what the concept of what a blending mode is. You can watch the video here! If you got here, thanks! Be sure to say hi wherever!
 
